@@ -61,7 +61,38 @@ Project
 
 
 # Key findings from EDA
+**Data Size**: 10348 points, of which 229 datapoints are invalid (negative Age)
 
+**Features in data:**
+ - Numerical features = 3 
+ - Year features = 2
+ - Categorical features = 7
+
+**Proposed Engineered Features:**
+  - 1 numerical feature (total years smoked)
+  - 3 categorical feature (smoking history; smoker stopped smoking; smoker still smoking)
+
+**Target:** Fairly balanced, not skewed. Lung Cancer 54.41%, non Lung Cancer 45.59%.
+
+**Observed relation with Target:**
+ - Generally, all features show relation with target. Especially categorical features.
+
+**Cleaning is required for Age and Gender:**
+ - Age: to drop datapoints with negative values, as examples seem invalid. They do not look like placeholder values.
+ - Gender: to clean up dupes (e.g. MALE and male). 1 'NAN' value to be backfilled
+
+**Missing values**
+- Air Pollution Exposure: missing count = 3 or 0.03% -> as there are only 3 missing values, it can be easily handled with backfill. 
+- COPD History: missing values count = 1112 or 10.75%
+- Taken Bronchodilators: missing count = 1061 or 10.25%
+
+**Pre-processing and feature engineering is required for 'Start Smoking' and 'Stop Smoking':**
+
+This is because these features contain both integer year values, together with categorical values 'Not Applicable', and 'Still Smoking'.
+
+As mentioned above, the engineered features are:
+- 1 numerical feature (total years smoked)
+- 3 categorical feature (smoking history; smoker stopped smoking; smoker still smoking)
 
 # Feature processing
 | Feature                      | Processing          | Details                                                                                                | Reason                                                                                                                                                                |
