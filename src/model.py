@@ -1,4 +1,5 @@
-#!usr/bin/env python
+#!usr/bin/env python3
+import sys
 import logging
 import numpy as np
 import pandas as pd
@@ -91,7 +92,7 @@ def build_logistic_model(X_train, y_train, X_cv, y_cv):
     return y_pred, score
 
 
-def build_neural_network(X_train, y_train, X_cv, y_cv, alpha_, lambda_):
+def build_neural_network(X_train, y_train, X_cv, y_cv, alpha_, lambda_, epochs=80):
     """
     Build Tensorflow neural network
 
@@ -102,14 +103,14 @@ def build_neural_network(X_train, y_train, X_cv, y_cv, alpha_, lambda_):
         y_cv: y cross validation array (n_samples)
         alpha_: learning rate float
         lambda_: regularization float
+        epochs: no. of epochs int. default 80
 
     Returns:
         loss: loss from training set, float
         val_loss: loss from validation set, float
         diff: loss minus val_loss, float
     """
-    BATCH_SIZE = 32
-    EPOCHS = 80
+    batch_size = 32
 
     logging.info(f"Running Neural Network: Hyper Parameters alpha_ = {alpha_}, lambda = {lambda_}")
     model = Sequential([
@@ -123,7 +124,7 @@ def build_neural_network(X_train, y_train, X_cv, y_cv, alpha_, lambda_):
                   optimizer=tf.keras.optimizers.Adam(learning_rate=alpha_),
                   metrics=['accuracy'])
 
-    history = model.fit(X_train, y_train, epochs=EPOCHS, batch_size=BATCH_SIZE, validation_data=(X_cv, y_cv))
+    history = model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, validation_data=(X_cv, y_cv))
 
     # prediction
     y_logits = model.predict(X_cv)
@@ -137,7 +138,7 @@ def build_neural_network(X_train, y_train, X_cv, y_cv, alpha_, lambda_):
     return loss, val_loss, loss - val_loss
 
 
-def build_nn_models(X_train, y_train, X_cv, y_cv, alphas, lambdas):
+def build_nn_models(X_train, y_train, X_cv, y_cv, alphas, lambdas, epochs):
     """
     Iterate to tune hyperparameters for NN, by providing a list of alphas and/or lambdas. Prints out the best values.
 
@@ -148,6 +149,7 @@ def build_nn_models(X_train, y_train, X_cv, y_cv, alphas, lambdas):
         y_cv: y cross validation array (n_samples)
         alphas: learning rate list
         lambdas: regularization list
+        epochs: no. of epochs int
 
     Returns: none
     """
@@ -159,7 +161,7 @@ def build_nn_models(X_train, y_train, X_cv, y_cv, alphas, lambdas):
         for i in range(len(alphas)):
             alpha_ = alphas[i]
             lambda_ = lambdas[0]
-            loss, val_loss, diff = build_neural_network(X_train, y_train, X_cv, y_cv, alpha_, lambda_)
+            loss, val_loss, diff = build_neural_network(X_train, y_train, X_cv, y_cv, alpha_, lambda_, epochs)
             hist.append([alpha_, lambda_, loss, val_loss, diff])
         logging.debug(f"finished iterating alphas = {alphas}")
 
@@ -168,7 +170,7 @@ def build_nn_models(X_train, y_train, X_cv, y_cv, alphas, lambdas):
         for i in range(len(lambdas)):
             alpha_ = alphas[0]
             lambda_ = lambdas[i]
-            loss, val_loss, diff = build_neural_network(X_train, y_train, X_cv, y_cv, alpha_, lambda_)
+            loss, val_loss, diff = build_neural_network(X_train, y_train, X_cv, y_cv, alpha_, lambda_, epochs)
             hist.append([alpha_, lambda_, loss, val_loss, diff])
         logging.debug(f"finished iterating lambdas = {lambdas}")
 
@@ -183,36 +185,52 @@ def build_nn_models(X_train, y_train, X_cv, y_cv, alphas, lambdas):
     logging.info(f"Best loss-val_loss: index = {np.argmax(loss_minus_val_loss)}")
 
 
+def tune_nn_alpha(X_train, y_train, X_cv, y_cv):
+    # Tune alpha
+    build_nn_models(X_train, y_train, X_cv, y_cv,
+                    [0.0001, 0.0005, 0.001, 0.005, 0.008, 0.01, 0.03, 0.05, 0.08, 0.1, 0.5, 10.], [0], 25)
+
+
+def tune_nn_lambda(X_train, y_train, X_cv, y_cv):
+    # Tune lambda
+    build_nn_models(X_train, y_train, X_cv, y_cv, [0.03],
+                    [0, 0.00001, 0.00005, 0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05, 10.], 25)
+
+
 def main():
+    # default flag
+    arg_flag = '-m'
+    if len(sys.argv) > 1:
+        arg_flag = sys.argv[1]
+
     logging.basicConfig(level=logging.INFO)
+
     logging.info("Loading inputs")
     data_loaded = load_processed_inputs()
 
     data, target = select_xy(data_loaded)
     X_train, X_cv, y_train, y_cv = train_test_split(data, target, test_size=0.10, random_state=1)
-    logging.info(f"Training and CV split complete. "
-                 f"X_train shape = {X_train.shape}, y_train shape = {y_train.shape}, "
+    logging.info(f"Training and CV split complete. X_train shape = {X_train.shape}, y_train shape = {y_train.shape}, "
                  f"X_cv shape = {X_cv.shape}, y_cv shape = {y_cv.shape}")
 
-    # Run Logistic Model
-    log_y_pred, log_score = build_logistic_model(X_train, y_train, X_cv, y_cv)
+    if arg_flag == '-ta':
+        tune_nn_alpha(X_train, y_train, X_cv, y_cv)
+    elif arg_flag == '-tl':
+        tune_nn_lambda(X_train, y_train, X_cv, y_cv)
+    elif arg_flag == '-m':
+        # Run Logistic Model
+        log_y_pred, log_score = build_logistic_model(X_train, y_train, X_cv, y_cv)
 
-    # Untuned Neural Network
-    untuned_train_loss, untuned_cv_loss, _ = build_neural_network(X_train, y_train, X_cv, y_cv, 0.001, 0)
+        # Untuned Neural Network
+        untuned_train_loss, untuned_cv_loss, _ = build_neural_network(X_train, y_train, X_cv, y_cv, 0.001, 0)
 
-    # Tuning hyperparameters
-    # Tune alpha
-    # build_nn_models(X_train, y_train, X_cv, y_cv,
-    #                 [0.0001, 0.0005, 0.001, 0.005, 0.008, 0.01, 0.03, 0.05, 0.08, 0.1, 0.5, 10.], [0])
+        # Tuned Neural Network
+        tuned_train_loss, tuned_cv_loss, _ = build_neural_network(X_train, y_train, X_cv, y_cv, 0.03, 0.00001)
 
-    # Tune lambda
-    # build_nn_models(X_train, y_train, X_cv, y_cv, [0.03],
-    #                 [0, 0.00001, 0.00005, 0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05, 10.])
-
-    # Tuned Neural Network
-    tuned_train_loss, tuned_cv_loss, _ = build_neural_network(X_train, y_train, X_cv, y_cv, 0.03, 0.00001)
-    logging.info(f"Untuned Neural Network: Training Loss: {untuned_train_loss}, CV Loss: {untuned_cv_loss}")
-    logging.info(f"Tuned Neural Network: Training Loss: {tuned_train_loss}, CV Loss: {tuned_cv_loss}")
+        logging.info("Summary \n----------------------------------------------------")
+        logging.info(f"Logistic Model: Score: {log_score}")
+        logging.info(f"Untuned Neural Network: Training Loss: {untuned_train_loss}, CV Loss: {untuned_cv_loss}")
+        logging.info(f"Tuned Neural Network: Training Loss: {tuned_train_loss}, CV Loss: {tuned_cv_loss}")
 
     logging.info("Models finished")
 
