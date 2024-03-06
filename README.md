@@ -1,7 +1,42 @@
 # Intro
+Lung cancer remains the leading cause of cancer death worldwide, including Singapore, claiming millions of lives each year. 
+Early detection is crucial for improving survival rates, but current diagnostic methods like chest X-rays and CT scans can be expensive, time-consuming, and prone to misinterpretation.
+
+## Data
+ The dataset provided contains patients’ medical information collected from all public hospitals in Singapore. 
+ Do note that there could be synthetic features in the dataset. 
+
+You can query the datasets using the following URL: 
+https://techassessment.blob.core.windows.net/aiap16-assessment-data/lung_cancer.db
+
+
+| Attribute              | Description                                                                |
+|------------------------|----------------------------------------------------------------------------|
+| ID                     | PatientID                                                                  |
+| Age                    | Age of the patient                                                         |
+| Gender                 | Gender of the patient                                                      |
+| COPD History           | Whether the patient has a history of Chronic Obstructive Pulmonary Disease |
+| Genetic Markers        | Presence of any genetic markers known to increase the risk of lung cancer  |
+| Air Pollution Exposure | Level of air pollution exposure in the patient’s daily life                |
+| Last Weight            | Last officially recorded weight of patient                                 |
+| Current Weight         | Current officially recorded weight of patient                              |
+| Start Smoking          | Year that the patient starts smoking                                       |
+| Stop Smoking           | Year that the patient stops smoking                                        |
+| Taken Bronchodilators  | Whether the patient is previously prescribed Bronchodilator medications    |
+| Frequency of Tiredness | Frequency of patient feeling tiredness in a day                            |
+| Dominant Hand          | Dominant hand of the patient                                               |
+| Lung Cancer Occurrence | Whether the patient has lung cancer or not. Lung Cancer = 1.               |
 
 
 # Overview of Structure
+
+Project
+- .github -> github actions
+- src     -> preprocessing and models
+- README.md
+- eda.ipynb -> Exploratory Data Analysis
+- requirements.txt -> Python packages
+- run.sh -> script to run
 
 
 # Instruction for executing pipeline
