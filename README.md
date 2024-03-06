@@ -40,6 +40,13 @@ Project
 
 
 # Instruction for executing pipeline
+| Command and argument | Action                                                    |
+|----------------------|-----------------------------------------------------------|
+| ./run.sh -p          | Preprocess data                                           |
+| ./run.sh -m          | Run both models - logistic regression, and neural network |
+| ./run.sh -ta         | Iterate list of alphas for neural network and find best   |
+| ./run.sh -tl         | Iterate list of lambdas for neural network and find best  |
+
 
 
 # Description of pipeline flow
