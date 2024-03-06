@@ -11,14 +11,14 @@ if [ -f "$db_file_path" ]; then
     wget -P "$local_dir" "$url"
 fi
 
+
 python3 --version
 
+
 if [ -z "$1" ]; then
-  echo "No argument provided."
-  echo "  -p to run pre-processing."
-  echo "  -m to run models."
-  echo "  -ta or -tl to iterate for alphas or lambdas respectively for neural network."
-  exit 1
+  echo "Run pre-processing and models."
+  python3 ./src/preprocess.py
+  python3 ./src/model.py
 fi
 
 
@@ -39,8 +39,10 @@ elif [ "$1" = "-m" ]; then
   python3 ./src/model.py "$1"
 
 else
-  echo "unknown argument $1"
+  echo "Unknown argument $1"
+  echo "  No argument: run pre-processing and models."
+  echo "  -p: run pre-processing only."
+  echo "  -m: run models only."
+  echo "  -ta or -tl: iterate for alphas or lambdas respectively for neural network."
   exit 1
 fi
-
-
