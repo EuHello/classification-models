@@ -62,6 +62,8 @@ Project
 
 
 # Key findings from EDA
+Refer to eda.ipynb
+
 **Data Size**: 10348 points, of which 229 datapoints are invalid (negative Age)
 
 **Features in data:**
