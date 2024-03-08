@@ -23,6 +23,6 @@ def load_input():
         columns=['ID', 'Start Smoking', 'Stop Smoking', 'COPD History', 'Taken Bronchodilators', 'Dominant Hand']
     )
     target = data.pop('Lung Cancer Occurrence')
-    logging.info(f"Inputs loaded: \n{data[0:2]}")
+    logging.debug(f"Inputs loaded: \n{data[0:2]}")
 
     return data.to_numpy(), target.to_numpy()
