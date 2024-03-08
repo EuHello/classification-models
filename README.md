@@ -146,11 +146,11 @@ tuning for number of pereceptrons, alpha (learning rate), lambda (L2 regularizat
 
 ### Accuracy vs Recall vs F1
 
-| Tuned Model         | Accuracy (CV) | Precision TP/(TP+FP) | Recall TP/(TP+FN) | F1     |
-|---------------------|---------------|----------------------|-------------------|--------|
-| Logistic Regression | 0.6729        | 0.6664               | 0.7743            | 0.7149 |
-| Neural Network      | 0.7322        | 0.7069               | 0.8414            | 0.7683 |
+| Tuned Model         | Accuracy (CV) | AUC  | Precision TP/(TP+FP) | Recall TP/(TP+FN) | F1     |
+|---------------------|---------------|------|----------------------|-------------------|--------|
+| Logistic Regression | 0.6729        | 0.67 | 0.6664               | 0.7743            | 0.7149 |
+| Neural Network      | 0.7322        | 0.72 | 0.7069               | 0.8414            | 0.7683 |
 
 
-Tuned Neural Network is superior. 
-However, further feature engineering may help improve Logistic Regression model further. 
+Tuned Neural Network is better for this task. 
+However, further feature engineering may improve Logistic Regression model further. 
