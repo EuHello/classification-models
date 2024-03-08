@@ -15,9 +15,9 @@ pd.set_option('display.width', 0)
 def main():
     logging.basicConfig(level=logging.INFO)
 
-    data, target = load_input()
-
+    data, target, features = load_input()
     X_train, X_test, y_train, y_test = train_test_split(data, target, test_size=0.1, random_state=1)
+    del data, target
     logging.info(f"Training test split. X_train shape = {X_train.shape}, y_train shape = {y_train.shape}, "
                  f"X_test shape = {X_test.shape}, y_test shape = {y_test.shape}")
 
@@ -40,6 +40,9 @@ def main():
     # Prediction
     optimised_lr = grid.best_estimator_
     y_pred = optimised_lr.predict(X_test)
+
+    weights = list(zip(features, optimised_lr.coef_[0]))
+    logging.info(f"The weights are: \n{weights}")
 
     get_score(y_test, y_pred)
     plot_roc_curve(y_test, y_pred, 'Logistic Regression')

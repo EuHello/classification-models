@@ -15,6 +15,7 @@ def load_input():
     Returns:
         train: numpy ndarray of shape (n_samples, n_features)
         target: numpy ndarray of shape (n_samples)
+        features: feature names list (n_features)
     """
     logging.info("Loading input for model")
     data = pd.read_csv(file_path)
@@ -25,4 +26,4 @@ def load_input():
     target = data.pop('Lung Cancer Occurrence')
     logging.debug(f"Inputs loaded: \n{data[0:2]}")
 
-    return data.to_numpy(), target.to_numpy()
+    return data.to_numpy(), target.to_numpy(), data.columns.values

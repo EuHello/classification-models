@@ -75,9 +75,9 @@ def tune_model(X_train, y_train, X_test, y_test):
 def main():
     logging.basicConfig(level=logging.INFO)
 
-    data, target = load_input()
-
+    data, target, _ = load_input()
     X_train, X_test, y_train, y_test = train_test_split(data, target, test_size=0.1, random_state=1)
+    del data, target
     logging.info(f"Training test split. X_train shape = {X_train.shape}, y_train shape = {y_train.shape}, "
                  f"X_test shape = {X_test.shape}, y_test shape = {y_test.shape}")
 
