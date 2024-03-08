@@ -8,33 +8,9 @@ from tensorflow import keras
 from tensorflow.keras import Sequential
 from tensorflow.keras.layers import Dense
 
+from utils.load_input import load_input
+
 pd.set_option('display.width', 0)
-input_file = 'processed.csv'
-
-
-def load_inputs():
-    data = pd.read_csv(input_file)
-    return data
-
-
-def select_xy(data: pd.DataFrame):
-    """
-    Selects the relevant features for X by dropping the un-necessary columns.
-
-    Args:
-        data: pandas dataframe
-
-    Returns:
-        data: pandas dataframe
-        y_train: pandas series with Target labels
-    """
-    logging.debug("Running select_xy method")
-    data = data.drop(
-        columns=['ID', 'Start Smoking', 'Stop Smoking', 'COPD History', 'Taken Bronchodilators', 'Dominant Hand'])
-    target = data.pop('Lung Cancer Occurrence')
-    logging.debug(f"Final data columns = \n{data[0:2]}")
-
-    return data.to_numpy(), target.to_numpy()
 
 
 def model_builder(hp):
@@ -87,11 +63,9 @@ def tune_model(X_train, y_train, X_test, y_test):
 
 
 def main():
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.INFO)
 
-    logging.info("Loading inputs")
-    data_loaded = load_inputs()
-    data, target = select_xy(data_loaded)
+    data, target = load_input()
 
     X_train, X_test, y_train, y_test = train_test_split(data, target, test_size=0.1, random_state=1)
     logging.info(f"Training test split. X_train shape = {X_train.shape}, y_train shape = {y_train.shape}, "
