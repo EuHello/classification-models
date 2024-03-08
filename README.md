@@ -4,9 +4,9 @@ Early detection is crucial for improving survival rates, but current diagnostic 
 
 ## Data
  The dataset provided contains patients’ medical information collected from all public hospitals in Singapore. 
- Do note that there could be synthetic features in the dataset. 
+ There could be synthetic features in the dataset. 
 
-You can query the datasets using the following URL: 
+Datasets' URL: 
 https://techassessment.blob.core.windows.net/aiap16-assessment-data/lung_cancer.db
 
 
@@ -40,13 +40,12 @@ Project
 
 
 # Instruction for executing pipeline
-| Command and argument | Action                                                     |
-|----------------------|------------------------------------------------------------|
-| ./run.sh             | Preprocess data, run models.                               |
-| ./run.sh -p          | Preprocess data only.                                      |
-| ./run.sh -m          | Run both models - logistic regression, and neural network. |
-| ./run.sh -ta         | Iterate list of alphas for neural network and find best.   |
-| ./run.sh -tl         | Iterate list of lambdas for neural network and find best.  |
+| Command and argument | Action                                                                           |
+|----------------------|----------------------------------------------------------------------------------|
+| ./run.sh             | Pre-process data, save, run logistic regression model.                           |
+| ./run.sh -p          | Pre-process data and saves it locally.                                           |
+| ./run.sh -lr         | Run Logistic Regression Model, tuning, cross-validation, prediction and scoring. |
+| ./run.sh -nn         | Run Neural Network Model, tuning, cross-validation, prediction and scoring.      |
 
 
 
@@ -120,7 +119,8 @@ As mentioned above, the engineered features are:
 # Model Choice
 
 1. Logistic Regression Model, tuning for C and solver. 
-2. Neural Network, 3 layers(1 input, 1 hidden, 1 output), with binarycrossentrophy loss
+2. Neural Network, 3 layers(1 input, 1 hidden, 1 output), with binarycrossentrophy loss, 
+tuning for number of pereceptrons, alpha (learning rate), lambda (L2 regularization). 
 
 
 # Model Evaluation
