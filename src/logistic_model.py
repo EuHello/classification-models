@@ -37,11 +37,11 @@ def main():
     logging.info(f"The best score is {grid.best_score_}")
     logging.info(f"The best params are {grid.best_params_}")
 
+    # Prediction
     optimised_lr = grid.best_estimator_
     y_pred = optimised_lr.predict(X_test)
 
-    score = get_score(y_test, y_pred)
-    logging.info(f"Prediction score = {score}")
+    get_score(y_test, y_pred)
     plot_roc_curve(y_test, y_pred, 'Logistic Regression')
     plot_confusion_matrix(y_test, y_pred, optimised_lr.classes_)
 

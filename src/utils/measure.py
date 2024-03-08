@@ -47,6 +47,7 @@ def plot_confusion_matrix(y_true, y_pred, classes):
     logging.info(f"tp = {tp}, fp = {fp}, fn = {fn}, tn = {tn}")
     recall = tp / (tp + fn)
     precision = tp / (tp + fp)
+    # Manually calculating F1 score
     f1_score_cal = 2 * (precision * recall) / (precision + recall)
 
     f1_ = f1_score(y_true, y_pred)
@@ -71,6 +72,6 @@ def get_score(y_true, y_pred):
     """
     y_pred = y_pred.reshape(-1)
     score = np.mean(y_pred == y_true)
-    logging.info(f"Accuracy Score = {score}")
+    logging.info(f"Prediction Score = {score}")
 
     return score

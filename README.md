@@ -31,7 +31,7 @@ https://techassessment.blob.core.windows.net/aiap16-assessment-data/lung_cancer.
 # Overview of Structure
 
 Project
-- .github -> github actions
+- .gitHub -> gitHub actions
 - src     -> preprocessing and models
 - README.md
 - eda.ipynb -> Exploratory Data Analysis
@@ -127,7 +127,7 @@ As mentioned above, the engineered features are:
 
 ## Confusion Matrix
 
-### Logistic Regression
+### Logistic Regression, Tuned
 
 | Total = 1012    | Predicted Positive | Predicted Negative |
 |-----------------|--------------------|--------------------|
@@ -135,21 +135,22 @@ As mentioned above, the engineered features are:
 | Actual Negative | FP = 210           | TN = 266           |
 
 
-### Tuned NN
+### Neural Network, Tuned
 
 | Total = 1012    | Predicted Positive | Predicted Negative |
 |-----------------|--------------------|--------------------|
-| Actual Positive | TP = 447           | FN = 89            |
-| Actual Negative | FP = 189           | TN = 287           |
+| Actual Positive | TP = 451           | FN = 85            |
+| Actual Negative | FP = 187           | TN = 289           |
 
 
 
 ### Accuracy vs Recall vs F1
 
-| Model                     | Accuracy (CV) | Precision TP/(TP+FP) | Recall TP/(TP+FN) | F1     |
-|---------------------------|---------------|----------------------|-------------------|--------|
-| Tuned Logistic Regression | 0.6729        | 0.6664               | 0.7743            | 0.7149 |
-| Tuned NN                  | 0.7322        | 0.702830             | 0.8339            | 0.7627 |
+| Tuned Model         | Accuracy (CV) | Precision TP/(TP+FP) | Recall TP/(TP+FN) | F1     |
+|---------------------|---------------|----------------------|-------------------|--------|
+| Logistic Regression | 0.6729        | 0.6664               | 0.7743            | 0.7149 |
+| Neural Network      | 0.7322        | 0.7069               | 0.8414            | 0.7683 |
 
 
-Tuned NN is superior. 
+Tuned Neural Network is superior. 
+However, further feature engineering may help improve Logistic Regression model further. 

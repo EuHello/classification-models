@@ -1,6 +1,7 @@
 #!usr/bin/env python3
 import logging
 import pandas as pd
+import numpy as np
 from sklearn.model_selection import train_test_split
 import tensorflow as tf
 import keras_tuner as kt
@@ -9,6 +10,7 @@ from tensorflow.keras import Sequential
 from tensorflow.keras.layers import Dense
 
 from utils.load_input import load_input
+from utils.measure import get_score, plot_roc_curve, plot_confusion_matrix
 
 pd.set_option('display.width', 0)
 
@@ -60,6 +62,14 @@ def tune_model(X_train, y_train, X_test, y_test):
     hypermodel.fit(X_train, y_train, epochs=50, validation_split=0.2, verbose=0)
     eval_result = hypermodel.evaluate(X_test, y_test)
     logging.info(f"Test Loss, Test Accuracy: {eval_result}")
+
+    # Prediction
+    y_logits = hypermodel.predict(X_test)
+    y_hat = tf.math.sigmoid(y_logits).numpy()
+    y_hat = np.where(y_hat >= 0.5, 1, 0)
+    get_score(y_test, y_hat)
+    plot_roc_curve(y_test, y_hat, "Neural Network")
+    plot_confusion_matrix(y_test, y_hat, classes=None)
 
 
 def main():
