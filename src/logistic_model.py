@@ -39,11 +39,10 @@ def main():
 
     # Prediction
     optimised_lr = grid.best_estimator_
-    y_pred = optimised_lr.predict(X_test)
-
     weights = list(zip(features, optimised_lr.coef_[0]))
     logging.info(f"The weights are: \n{weights}")
 
+    y_pred = optimised_lr.predict(X_test)
     get_score(y_test, y_pred)
     plot_roc_curve(y_test, y_pred, 'Logistic Regression')
     plot_confusion_matrix(y_test, y_pred, optimised_lr.classes_)

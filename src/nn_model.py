@@ -36,7 +36,15 @@ def model_builder(hp):
     return model
 
 
-def tune_model(X_train, y_train, X_test, y_test):
+def main():
+    logging.basicConfig(level=logging.INFO)
+
+    data, target, _ = load_input()
+    X_train, X_test, y_train, y_test = train_test_split(data, target, test_size=0.1, random_state=1)
+    del data, target
+    logging.info(f"Training test split. X_train shape = {X_train.shape}, y_train shape = {y_train.shape}, "
+                 f"X_test shape = {X_test.shape}, y_test shape = {y_test.shape}")
+
     tuner = kt.Hyperband(model_builder,
                          objective='val_accuracy',
                          max_epochs=50,
@@ -51,11 +59,11 @@ def tune_model(X_train, y_train, X_test, y_test):
     best_hps = tuner.get_best_hyperparameters(num_trials=1)[0]
 
     print(f"""
-    The hyperparameter search is complete. 
-    The optimal number of units in the first densely-connected layer is {best_hps.get('units')}, 
-    the optimal number of units in the second densely-connected layer {best_hps.get('hidden')}, 
-    the optimal learning rate for the optimizer is {best_hps.get('learning_rate')}, 
-    and the optimal lambda for the L2 regularizer is {best_hps.get('l2_lambda')}.
+    Hyperparameter search complete. 
+    1st dense layer: optimal number of units is {best_hps.get('units')}, 
+    2nd dense layer: optimal number of units is {best_hps.get('hidden')}, 
+    Optimal learning rate is {best_hps.get('learning_rate')}, 
+    Optimal lambda for the L2 regularizer is {best_hps.get('l2_lambda')}.
     """)
 
     hypermodel = tuner.hypermodel.build(best_hps)
@@ -70,18 +78,6 @@ def tune_model(X_train, y_train, X_test, y_test):
     get_score(y_test, y_hat)
     plot_roc_curve(y_test, y_hat, "Neural Network")
     plot_confusion_matrix(y_test, y_hat, classes=None)
-
-
-def main():
-    logging.basicConfig(level=logging.INFO)
-
-    data, target, _ = load_input()
-    X_train, X_test, y_train, y_test = train_test_split(data, target, test_size=0.1, random_state=1)
-    del data, target
-    logging.info(f"Training test split. X_train shape = {X_train.shape}, y_train shape = {y_train.shape}, "
-                 f"X_test shape = {X_test.shape}, y_test shape = {y_test.shape}")
-
-    tune_model(X_train, y_train, X_test, y_test)
 
     return 0
 
