@@ -3,7 +3,7 @@
 *.db
 *.csv
 
-
+nn_tuner
 .ipynb_checkpoints
 
 .idea

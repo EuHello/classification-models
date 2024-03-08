@@ -119,38 +119,8 @@ As mentioned above, the engineered features are:
 
 # Model Choice
 
-## 1. Logistic Regression
-
-score = 0.6640316205533597
-
-## 2. Neural Network
-   a. Tuning Hyper-parameters
-
-| NN architecture | Cross Validation Loss |
-|-----------------|-----------------------|
-| 20,12,1         | 0.5338                |
-| 20,6,1          | 0.5301                |
-| 20,4,1          | 0.5261                |
-| 20,1            | 0.5267                |
-| 19,1            | 0.5264                |
-| 12,1            | 0.5309                |
-
-Tune Alpha
-alpha params = [0.0001, 0.0005, 0.001, 0.005, 0.008, 0.01, 0.03, 0.05, 0.08, 0.1, 0.5, 10.]
-Selected alpha = 0.03
-
-Tune Lambda
-lambda params = [0, 0.00001, 0.00005, 0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05, 10.])
-Selected lambda = 0.00001
-
-
-   b. final results
-
-| NN (80 epochs) | Training Loss       | Cross Validation Loss |
-|----------------|---------------------|-----------------------|
-| Untuned NN     | 0.47575679421424866 | 0.5230705738067627    |
-| Tuned NN       | 0.4582006633281708  | 0.49096259474754333   |
-
+1. Logistic Regression Model, tuning for C and solver. 
+2. Neural Network, 3 layers(1 input, 1 hidden, 1 output), with binarycrossentrophy loss
 
 
 # Model Evaluation
@@ -161,8 +131,8 @@ Selected lambda = 0.00001
 
 | Total = 1012    | Predicted Positive | Predicted Negative |
 |-----------------|--------------------|--------------------|
-| Actual Positive | TP = 393           | FN = 143           |
-| Actual Negative | FP = 197           | TN = 279           |
+| Actual Positive | TP = 415           | FN = 121           |
+| Actual Negative | FP = 210           | TN = 266           |
 
 
 ### Tuned NN
@@ -176,10 +146,10 @@ Selected lambda = 0.00001
 
 ### Accuracy vs Recall vs F1
 
-| Model               | Accuracy (CV) | Precision TP/(TP+FP) | Recall TP/(TP+FN) | F1     |
-|---------------------|---------------|----------------------|-------------------|--------|
-| Logistic Regression | 0.6640        | 0.6661               | 0.7332            | 0.6980 |
-| Tuned NN            | 0.7322        | 0.702830             | 0.8339            | 0.7627 |
+| Model                     | Accuracy (CV) | Precision TP/(TP+FP) | Recall TP/(TP+FN) | F1     |
+|---------------------------|---------------|----------------------|-------------------|--------|
+| Tuned Logistic Regression | 0.6729        | 0.6664               | 0.7743            | 0.7149 |
+| Tuned NN                  | 0.7322        | 0.702830             | 0.8339            | 0.7627 |
 
 
 Tuned NN is superior. 
