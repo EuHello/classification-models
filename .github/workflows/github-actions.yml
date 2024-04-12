@@ -1,4 +1,4 @@
-name: AIAP Assessment 2
+name: Run pipeline
 on: [push, workflow_dispatch]
 
 jobs:
